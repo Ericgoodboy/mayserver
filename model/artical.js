@@ -68,22 +68,31 @@ const updateOrInsert=function(data) {
 const update=function(data) {
     let path = baseDir+data.id+".dat"
     let path2 = baseDir+data.id+".md"
+    fs.writeFile(path2,data.value,()=>{
+        console.log("markdown updated")
+    })
     fs.writeFile(path,data.editorContent,()=>{
         console.log("html updated")
     })
-    fs.writeFile(path2,data.value,()=>{
-        console.log("markdown updated")
+    let sql = "UPDATE atical SET title= ?, type= ? WHERE aid= ? ;"
+    let arr = [data.title,data.d_type,data.id]
+    let connection = getConnection()
+    connection.query(sql,arr,function(err,res){
+        if(err){
+            console.log(err)
+        }else(console.log(res))
+        connection.commit()
+        connection.end()
     })
 }
 const insert=function(data) {
     let sql = "INSERT INTO atical (aid,title,author,time,subscrib,type) VALUES (?,?,?,now(),?,?);"
-    const dom = new JSDOM(data.editorContent);
-    desc = dom.window.document.getElementsByTagName("p")[0]
+    // const dom = new JSDOM(data.editorContent);
+    // desc = dom.window.document.getElementsByTagName("p")[0]
     let path = baseDir+data.id+".dat"
     let path2 = baseDir+data.id+".md"
     fs.writeFile(path,data.editorContent,()=>{})
     fs.writeFile(path2,data.value,()=>{})
-
     arr = [data.id,data.title,"mayeye","预览正在开发...",data.d_type]
     let connection = getConnection()
     connection.query(sql,arr,function(err,res){
@@ -105,7 +114,7 @@ const getfulllArtical=function(id,callback){
             fs.readFile(path,function(err,resf){
                     if(err){
                     }else{
-                        // console.dir(String(resf))
+                        console.dir(String(resf))
                         let data = {
                             id:res[0].aid,
                             title:res[0].title,
