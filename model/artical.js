@@ -11,7 +11,6 @@ const getAllArticals=function(callback) {
     let connection = getConnection()
     connection.query(sql, function (err, res, fields) {
         if (err) { callback(err, null) }
-        callback(null, res)
         else{callback(null, res)}
         connection.end()
     })
@@ -67,13 +66,6 @@ const updateOrInsert=function(data) {
     })
 }
 const update=function(data) {
-    let path = baseDir+data.id+".dat"
-    let path2 = baseDir+data.id+".md"
-    fs.writeFile(path,data.editorContent,()=>{
-        console.log("html updated")
-
-
-
     updateArticals(data,function(err,res){
         if(err){
             console.log(err);
@@ -94,8 +86,6 @@ const addArticals = function(arr,callback){
         connection.commit()
         connection.end()
     })
-    fs.writeFile(path2,data.value,()=>{
-        console.log("markdown updated")
 }
 const deleteArticals = function(aid,callback){
     let sql = "delete from markdowns where aid = ?"
@@ -150,11 +140,6 @@ const insert=function(data) {
     let sql = "INSERT INTO atical (aid,title,author,time,subscrib,type) VALUES (?,?,?,now(),?,?);"
     const dom = new JSDOM(data.editorContent);
     desc = dom.window.document.getElementsByTagName("p")[0]
-    let path = baseDir+data.id+".dat"
-    let path2 = baseDir+data.id+".md"
-    fs.writeFile(path,data.editorContent,()=>{})
-    fs.writeFile(path2,data.value,()=>{})
-
     // let path = baseDir+data.id+".dat"
     // let path2 = baseDir+data.id+".md"
     // fs.writeFile(path,data.editorContent,()=>{})
@@ -185,21 +170,6 @@ const getfulllArtical=function(id,callback){
         else{
             if(res.length>0){
             let path = baseDir+res[0].aid+".dat"
-            fs.readFile(path,function(err,resf){
-                    if(err){
-                    }else{
-                        // console.dir(String(resf))
-                        let data = {
-                            id:res[0].aid,
-                            title:res[0].title,
-                            body:String(resf),
-                            user:res[0].author,
-                            saw:res[0].saw,
-                            type:res[0].type,
-                            value:"# hello mark down"
-                        }
-                        
-                        callback(err,data)
             getArticals(id,function(err,resf){
                 if(err){
                 }else{
@@ -212,9 +182,6 @@ const getfulllArtical=function(id,callback){
                         saw:res[0].saw,
                         type:res[0].type,
                         value:"# hello mark down"
-
-
-
                     }
                     callback(err,data)
                    }else{
@@ -246,29 +213,6 @@ const getallinfo=function(id,callback){
         else{
             if(res.length>0){
             let path = baseDir+res[0].aid+".dat"
-            fs.readFile(path,function(err,resf){
-                    if(err){
-                    }else{
-                        // console.dir(String(resf))
-                        md = "# hello md"
-                        try {
-                            md = String(fs.readFileSync(baseDir+res[0].aid+".md"))
-                        } catch (error) {
-                            
-                        }
-                        console.log(md)
-                        let data = {
-                            id:res[0].aid,
-                            title:res[0].title,
-                            body:String(resf),
-                            user:res[0].author,
-                            saw:res[0].saw,
-                            value:md,
-                            type:res[0].type,
-                            
-                        }
-                        
-                        callback(err,data)
             getArticals(id,function(err,resf){
                 if(err){
                 }else{
