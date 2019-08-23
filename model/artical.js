@@ -122,7 +122,20 @@ const updateArticals = function(data,callback){
         connection2.end()
     })
 }
+const updateTop=function(aid,top){
+    let sql2 = "update atical set toping=? where aid = ?"
+    let arr2 = [top,aid]
+    let connection2 = getConnection()
+    connection2.query(sql2, arr2,function(err,res){
+        if(err){
+            console.log(err)
+        }else{
 
+        }
+        connection2.commit()
+        connection2.end()
+    })
+}
 const getArticals = function(aid,callback){
     let sql = "select * from markdowns where aid = ?"
     arr= [aid]
@@ -222,7 +235,7 @@ const getallinfo=function(id,callback){
                         title:res[0].title,
                         body:"404",
                         user:res[0].author,
-                        saw:res[0].saw,
+                        saw:res[0].saw, 
                         type:res[0].type,
                         value:"# hello mark down"
                     }
@@ -250,5 +263,5 @@ const getallinfo=function(id,callback){
 
 
 artical = {getAllArticals,testhas,updateOrInsert,geTopArticals,
-    getallinfo,getfulllArtical,geArticalsBytype}
+    getallinfo,getfulllArtical,geArticalsBytype,updateTop}
 module.exports = artical

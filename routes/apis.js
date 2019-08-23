@@ -106,7 +106,7 @@ router.get("/get/toping",function(req,res,next){
           publishDate:t,
           desc:result[i].subscrib,
           user:result[i].author,
-
+          aid:result[i].aid
         }
         resdata.push(data)
       }
@@ -158,5 +158,12 @@ router.post("/get/sub-body",function(req,res,next){
       }
     }
   })
+})
+router.get("/totop",function(req,res,next){
+  
+  // console.log(req.params)
+  console.log(req.query.aid)
+  artical.updateTop(req.query.aid,1)
+  res.send("ok")
 })
 module.exports = router;
