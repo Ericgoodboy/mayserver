@@ -12,6 +12,7 @@ const getAllArticals=function(callback) {
     connection.query(sql, function (err, res, fields) {
         if (err) { callback(err, null) }
         callback(null, res)
+        else{callback(null, res)}
         connection.end()
     })
 }
@@ -68,31 +69,104 @@ const updateOrInsert=function(data) {
 const update=function(data) {
     let path = baseDir+data.id+".dat"
     let path2 = baseDir+data.id+".md"
-    fs.writeFile(path2,data.value,()=>{
-        console.log("markdown updated")
-    })
     fs.writeFile(path,data.editorContent,()=>{
         console.log("html updated")
-    })
-    let sql = "UPDATE atical SET title= ?, type= ? WHERE aid= ? ;"
-    let arr = [data.title,data.d_type,data.id]
+
+
+
+    updateArticals(data,function(err,res){
+        if(err){
+            console.log(err);
+        }else{
+            console.log("changeOk")
+        }
+    });
+}
+
+
+const addArticals = function(arr,callback){
+    let sql = "INSERT INTO markdowns (aid,md,render) VALUES (?,?,?);"
     let connection = getConnection()
     connection.query(sql,arr,function(err,res){
         if(err){
-            console.log(err)
-        }else(console.log(res))
+            callback(err,null)
+        }else(callback(null,res))
+        connection.commit()
+        connection.end()
+    })
+    fs.writeFile(path2,data.value,()=>{
+        console.log("markdown updated")
+}
+const deleteArticals = function(aid,callback){
+    let sql = "delete from markdowns where aid = ?"
+    let connection = getConnection()
+    connection.query(sql,[aid],function(err,res){
+        if(err){
+            callback(err,null)
+        }else(callback(null,res))
         connection.commit()
         connection.end()
     })
 }
+const updateArticals = function(data,callback){
+    let sql = "update markdowns set md=?,render= ? where aid = ?"
+    let arr= [data.value,data.editorContent,data.id]
+    let connection = getConnection()
+    connection.query(sql, arr,function(err,res){
+        if(err){
+            callback(err,null)
+        }else(callback(null,res))
+        connection.commit()
+        connection.end()
+    })
+    let sql2 = "update atical set title=?,type= ? where aid = ?"
+    let arr2 = [data.title,data.d_type,data.id]
+    let connection2 = getConnection()
+    connection2.query(sql2, arr2,function(err,res){
+        if(err){
+            console.log(err)
+        }else{
+
+        }
+        connection2.commit()
+        connection2.end()
+    })
+}
+
+const getArticals = function(aid,callback){
+    let sql = "select * from markdowns where aid = ?"
+    arr= [aid]
+    let connection = getConnection()
+    connection.query(sql, arr,function(err,res){
+        if(err){
+            callback(err,null)
+        }else(callback(null,res))
+        connection.commit()
+        connection.end()
+    })
+}
+
 const insert=function(data) {
     let sql = "INSERT INTO atical (aid,title,author,time,subscrib,type) VALUES (?,?,?,now(),?,?);"
-    // const dom = new JSDOM(data.editorContent);
-    // desc = dom.window.document.getElementsByTagName("p")[0]
+    const dom = new JSDOM(data.editorContent);
+    desc = dom.window.document.getElementsByTagName("p")[0]
     let path = baseDir+data.id+".dat"
     let path2 = baseDir+data.id+".md"
     fs.writeFile(path,data.editorContent,()=>{})
     fs.writeFile(path2,data.value,()=>{})
+
+    // let path = baseDir+data.id+".dat"
+    // let path2 = baseDir+data.id+".md"
+    // fs.writeFile(path,data.editorContent,()=>{})
+    // fs.writeFile(path2,data.value,()=>{})
+    arr0= [data.id,data.value,data.editorContent]
+    addArticals(arr0,function(err,res){
+        if(err){
+            console.log(err)
+        }else{
+            console.log("add to database ok")
+        }
+    })
     arr = [data.id,data.title,"mayeye","预览正在开发...",data.d_type]
     let connection = getConnection()
     connection.query(sql,arr,function(err,res){
@@ -114,7 +188,7 @@ const getfulllArtical=function(id,callback){
             fs.readFile(path,function(err,resf){
                     if(err){
                     }else{
-                        console.dir(String(resf))
+                        // console.dir(String(resf))
                         let data = {
                             id:res[0].aid,
                             title:res[0].title,
@@ -126,8 +200,39 @@ const getfulllArtical=function(id,callback){
                         }
                         
                         callback(err,data)
+            getArticals(id,function(err,resf){
+                if(err){
+                }else{
+                   if (resf.length<=0){
+                    let data = {
+                        id:res[0].aid,
+                        title:res[0].title,
+                        body:"404",
+                        user:res[0].author,
+                        saw:res[0].saw,
+                        type:res[0].type,
+                        value:"# hello mark down"
+
+
+
                     }
+                    callback(err,data)
+                   }else{
+                    let data = {
+                        id:res[0].aid,
+                        title:res[0].title,
+                        body:resf[0].render,
+                        user:res[0].author,
+                        saw:res[0].saw,
+                        type:res[0].type,
+                        value:"# hello mark down"
+                    }
+                    callback(err,data)
+                   }
+                    
+                }
             })
+            
             }
         }
         connection.end()
@@ -164,7 +269,34 @@ const getallinfo=function(id,callback){
                         }
                         
                         callback(err,data)
+            getArticals(id,function(err,resf){
+                if(err){
+                }else{
+                   if (resf.length<=0){
+                    let data = {
+                        id:res[0].aid,
+                        title:res[0].title,
+                        body:"404",
+                        user:res[0].author,
+                        saw:res[0].saw,
+                        type:res[0].type,
+                        value:"# hello mark down"
                     }
+                    callback(err,data)
+                   }else{
+                    let data = {
+                        id:res[0].aid,
+                        title:res[0].title,
+                        body:resf[0].render,
+                        user:res[0].author,
+                        saw:res[0].saw,
+                        type:res[0].type,
+                        value:resf[0].md,
+                    }
+                    callback(err,data)
+                   }
+                    
+                }
             })
             }
         }
