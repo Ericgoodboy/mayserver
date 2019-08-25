@@ -73,13 +73,13 @@ router.get("/get/hotarticals",function(req,res,next){
         let resdata = []
       for(let i=0;i<result.length;i++){
         let t = result[i].time;
-        t = (t.getYear()+1900)+"-"+t.getMonth()+"-"+t.getDay()
+        t = (t.getYear()+1900)+"-"+(t.getMonth()+1)+"-"+t.getDate()
         let data = {
           title:result[i].title,
           publishDate:t,
           desc:result[i].subscrib,
           user:result[i].author,
-          url:"/iji",
+          // url:"/iji",
           id:result[i].aid
         }
         console.log(result[i].time instanceof Date)
@@ -164,6 +164,12 @@ router.get("/totop",function(req,res,next){
   // console.log(req.params)
   console.log(req.query.aid)
   artical.updateTop(req.query.aid,1)
+  res.send("ok")
+})
+router.get("/backtop",function(req,res,next){
+  // console.log(req.params)
+  console.log(req.query.aid)
+  artical.updateTop(req.query.aid,0)
   res.send("ok")
 })
 module.exports = router;
