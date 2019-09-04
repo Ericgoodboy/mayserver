@@ -3,6 +3,7 @@ const router = express.Router();
 
 router.post("/upload",function(req,res,next){
     console.log(req.body)
-    res.send("this is url")
+    var imgurl = "/img/"+(new Date).getTime()
+    res.send("")
 })
 module.exports = router;
