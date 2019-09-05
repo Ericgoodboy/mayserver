@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
         let arr= file.originalname.split(".")
         let prefix = arr[arr.length-1]
         let fullname = Date.now() + "-" + "markdown."+prefix
-        cb(null, Date.now() + "-" + file.originalname.split("."))
+        cb(null, fullname)
     }
 })
 //创建multer对象
