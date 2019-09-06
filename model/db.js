@@ -1,13 +1,13 @@
 var mysql      = require('mysql');
-
+const config = require("../blog.config.js")
 
 // connection.connect();
 let getConnection =function(){
   let connection = mysql.createConnection({
-    host     : '114.116.106.193',
-    user     : 'root',
-    password : 'lj2p1sh.',
-    database : 'mayblog'
+    host     : config.host,
+    user     : config.user,
+    password : config.password,
+    database : config.database
   });
   connection.connect()
   return connection
