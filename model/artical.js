@@ -138,12 +138,21 @@ const updateTop=function(aid,top){
 }
 const getArticals = function(aid,callback){
     let sql = "select * from markdowns where aid = ?"
+    let sql2 = "update atical set saw = saw+1 where aid = ?"
     arr= [aid]
     let connection = getConnection()
     connection.query(sql, arr,function(err,res){
         if(err){
             callback(err,null)
         }else(callback(null,res))
+        connection.commit()
+        connection.end()
+    })
+    connection = getConnection()
+    connection.query(sql2, arr,function(err,res){
+        if(err){
+            console.log("数据加载失败")
+        }else(console.log("查看人数修改成功"))
         connection.commit()
         connection.end()
     })
