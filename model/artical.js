@@ -148,13 +148,13 @@ const getArticals = function(aid,callback){
         connection.commit()
         connection.end()
     })
-    connection = getConnection()
-    connection.query(sql2, arr,function(err,res){
+    let connection2 = getConnection()
+    connection2.query(sql2, arr,function(err,res){
         if(err){
             console.log("数据加载失败")
         }else(console.log("查看人数修改成功"))
-        connection.commit()
-        connection.end()
+        connection2.commit()
+        connection2.end()
     })
 }
 
