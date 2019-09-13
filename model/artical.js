@@ -1,6 +1,6 @@
 let getConnection =require('./db')
 const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+// const { JSDOM } = jsdom;
 const baseDir = "./articals/"
 // const dom = new JSDOM(`<p>Hello world</p><p>hello</p>`);
 // console.log(dom.window.document.getElementsByTagName("p")[0].innerHTML);
@@ -60,7 +60,7 @@ const updateOrInsert=function(data) {
         if(has){
             update(data)
         }else{
-            console.log("insert")
+            // console.log("insert")
             insert(data)
         }
     })
@@ -68,9 +68,9 @@ const updateOrInsert=function(data) {
 const update=function(data) {
     updateArticals(data,function(err,res){
         if(err){
-            console.log(err);
+            // console.log(err);
         }else{
-            console.log("changeOk")
+            // console.log("changeOk")
         }
     });
 }
@@ -160,8 +160,6 @@ const getArticals = function(aid,callback){
 
 const insert=function(data) {
     let sql = "INSERT INTO atical (aid,title,author,time,subscrib,type) VALUES (?,?,?,now(),?,?);"
-    const dom = new JSDOM(data.editorContent);
-    desc = dom.window.document.getElementsByTagName("p")[0]
     // let path = baseDir+data.id+".dat"
     // let path2 = baseDir+data.id+".md"
     // fs.writeFile(path,data.editorContent,()=>{})
@@ -269,7 +267,6 @@ const getallinfo=function(id,callback){
         connection.end()
     })
 }
-
 
 artical = {getAllArticals,testhas,updateOrInsert,geTopArticals,
     getallinfo,getfulllArtical,geArticalsBytype,updateTop}

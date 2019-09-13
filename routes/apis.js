@@ -1,7 +1,7 @@
-
 const express = require('express');
 const router = express.Router();
 const artical = require("../model/artical")
+const tags = require("../model/tags")
 // const parser = require('html-dom-parser');
 /* GET home page. */
 
@@ -36,7 +36,7 @@ router.post('/editor/getCode', function(req, res, next) {
   res.send(data)
 });
 router.get("/get/items",function(req,res,next){
-  console.log("sdas")
+  // console.log("sdas")
   artical.getAllArticals(function(err,result){
     if(err){
       // console.error("err")
@@ -55,7 +55,7 @@ router.get("/get/items",function(req,res,next){
           id:result[i].aid,
           type:result[i].type
         }
-        console.log(result[i].time instanceof Date)
+        // console.log(result[i].time instanceof Date)
         resdata.push(data)
       }
       res.send(resdata)
@@ -172,4 +172,20 @@ router.get("/backtop",function(req,res,next){
   artical.updateTop(req.query.aid,0)
   res.send("ok")
 })
+router.get("/get/tags",function(req,res,next){
+  tags.getAllTags(function(err,result){
+    if(err){
+      res.send({})
+    }else{
+      let data = {}
+      
+      for(let i=0;i<result.length;i++){
+        data[result[i].id] = result[i].value
+      }
+      console.log(data[1])
+      res.send(data)
+    }
+  })
+})
+
 module.exports = router;
