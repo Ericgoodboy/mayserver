@@ -64,7 +64,7 @@ router.get("/get/items",function(req,res,next){
   })
 })
 router.get("/get/hotarticals",function(req,res,next){
-  artical.getAllArticals(function(err,result){
+  artical.getHotAllArticals(function(err,result){
     if(err){
       console.error(err)
     }else{
@@ -172,7 +172,7 @@ router.get("/backtop",function(req,res,next){
   artical.updateTop(req.query.aid,0)
   res.send("ok")
 })
-router.get("/get/tags",function(req,res,next){
+router.post("/get/tags",function(req,res,next){
   tags.getAllTags(function(err,result){
     if(err){
       res.send({})
@@ -187,5 +187,25 @@ router.get("/get/tags",function(req,res,next){
     }
   })
 })
+router.post("/get/tagsinfo",function(req,res,next){
+  tags.getAllTagsInfo(function(err,result){
+    if(err){
+      res.send({})
+    }else{
+      let data = []
+      for(let i=0;i<result.length;i++){
+        temp = {
+          tid:result[i].tid,
+          title:result[i].title,
+          c :result[i].c
+        }
+        data.push(temp)
+      }
+      // console.log(data)
+      res.send(data)
+    }
+  })
+})
+
 
 module.exports = router;

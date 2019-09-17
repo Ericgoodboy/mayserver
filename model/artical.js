@@ -15,6 +15,16 @@ const getAllArticals=function(callback) {
         connection.end()
     })
 }
+const getHotAllArticals=function(callback) {
+    let sql = 'select * from atical ORDER BY saw DESC LIMIT 5'
+    // console.log(connection.state)
+    let connection = getConnection()
+    connection.query(sql, function (err, res, fields) {
+        if (err) { callback(err, null) }
+        else{callback(null, res)}
+        connection.end()
+    })
+}
 const geTopArticals=function(callback) {
     let sql = 'select * from atical where toping = 1'
     // console.log(connection.state)
@@ -136,6 +146,7 @@ const updateTop=function(aid,top){
         connection2.end()
     })
 }
+// 获取特定的文章
 const getArticals = function(aid,callback){
     let sql = "select * from markdowns where aid = ?"
     let sql2 = "update atical set saw = saw+1 where aid = ?"
@@ -269,5 +280,5 @@ const getallinfo=function(id,callback){
 }
 
 artical = {getAllArticals,testhas,updateOrInsert,geTopArticals,
-    getallinfo,getfulllArtical,geArticalsBytype,updateTop}
+    getallinfo,getfulllArtical,geArticalsBytype,updateTop,getHotAllArticals}
 module.exports = artical
