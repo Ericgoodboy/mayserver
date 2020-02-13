@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const artical = require("../model/artical")
 const tags = require("../model/tags")
+const confg = require("../blog.config")
 // const parser = require('html-dom-parser');
 /* GET home page. */
 
@@ -11,7 +12,7 @@ router.post('/login', function(req, res, next) {
       data:[],
       success:true
   }
- 
+  req.session["login"] = true
   res.send(data)
 });
 
@@ -21,7 +22,12 @@ router.post('/editor/save', function(req, res, next) {
       data:[],
       msg:""
   }
-  artical.updateOrInsert(req.body)
+  if(req.session["login"]){
+    artical.updateOrInsert(req.body)
+    res.send(data)
+  }else{
+    res.send(data)
+  }
   res.send(data)
 });
 router.post('/editor/getCode', function(req, res, next) {
