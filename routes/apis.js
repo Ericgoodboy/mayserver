@@ -6,6 +6,9 @@ const confg = require("../blog.config")
 // const parser = require('html-dom-parser');
 /* GET home page. */
 
+
+
+// 登录模拟逻辑
 router.post('/login', function(req, res, next) {
   data={
       status:1,
@@ -16,6 +19,8 @@ router.post('/login', function(req, res, next) {
   res.send(data)
 });
 
+
+//保存的编辑
 router.post('/editor/save', function(req, res, next) {
   data={
       status:1,
@@ -30,6 +35,8 @@ router.post('/editor/save', function(req, res, next) {
   }
   res.send(data)
 });
+
+// 获取一个唯一的编码作为文章的名字
 router.post('/editor/getCode', function(req, res, next) {
   data={
     status:1,
@@ -41,6 +48,10 @@ router.post('/editor/getCode', function(req, res, next) {
   data.code=d.getTime()
   res.send(data)
 });
+
+
+
+// 获取所有项目
 router.get("/get/items",function(req,res,next){
   // console.log("sdas")
   artical.getAllArticals(function(err,result){
@@ -69,6 +80,10 @@ router.get("/get/items",function(req,res,next){
     }
   })
 })
+
+
+
+// 获取热点文章
 router.get("/get/hotarticals",function(req,res,next){
   artical.getHotAllArticals(function(err,result){
     if(err){
@@ -96,6 +111,10 @@ router.get("/get/hotarticals",function(req,res,next){
     }
   })
 })
+
+
+
+// 获取置顶文章
 router.get("/get/toping",function(req,res,next){
   artical.geTopArticals(function(err,result){
     if(err){
@@ -121,6 +140,8 @@ router.get("/get/toping",function(req,res,next){
     }
   })
 })
+
+//获取完整文章信息
 router.post("/get/fullartical",function(req,res,next){
   artical.getfulllArtical(req.body.id,function(err,resf){
     if(err){
@@ -130,6 +151,9 @@ router.post("/get/fullartical",function(req,res,next){
     }
   })
 })
+
+
+// 获取一个文章的完整信息
 router.post("/editor/getInit",function(req,res,next){
   artical.getallinfo(req.body.id,function(err,resf){
     if(err){
@@ -138,6 +162,9 @@ router.post("/editor/getInit",function(req,res,next){
     }
   })
 })
+
+
+
 router.post("/get/sub-body",function(req,res,next){
   artical.geArticalsBytype(req.body,function(err,result){
     if(err){
@@ -165,19 +192,24 @@ router.post("/get/sub-body",function(req,res,next){
     }
   })
 })
+
+//置顶
 router.get("/totop",function(req,res,next){
-  
   // console.log(req.params)
   console.log(req.query.aid)
   artical.updateTop(req.query.aid,1)
   res.send("ok")
 })
+
+//取消置顶
 router.get("/backtop",function(req,res,next){
   // console.log(req.params)
   console.log(req.query.aid)
   artical.updateTop(req.query.aid,0)
   res.send("ok")
 })
+
+//获取target映射
 router.post("/get/tags",function(req,res,next){
   tags.getAllTags(function(err,result){
     if(err){
@@ -193,6 +225,9 @@ router.post("/get/tags",function(req,res,next){
     }
   })
 })
+
+
+//用于统计每一个tags的文章的数量
 router.post("/get/tagsinfo",function(req,res,next){
   tags.getAllTagsInfo(function(err,result){
     if(err){
@@ -209,6 +244,22 @@ router.post("/get/tagsinfo",function(req,res,next){
       }
       // console.log(data)
       res.send(data)
+    }
+  })
+})
+router.get("/add/tag",function(req,res,next){
+  let tag = req.query.tag
+  console.log("ds "+tag)
+  tags.addTags(tag,function(err,rest){
+    if(err){
+      res.send({
+        status:-1
+      })
+    }else{
+      res.send({
+        status:1,
+        tagsId:rest
+      })
     }
   })
 })
