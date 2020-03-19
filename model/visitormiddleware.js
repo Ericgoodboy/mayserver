@@ -16,6 +16,7 @@ router.use(function(req,res,next){
         }else{
             console.log(`succes log:${Day} - ${host} - ${ip} - ${url}`)
         }
+        connection.close()
     })
     
     next() 

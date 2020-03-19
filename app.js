@@ -19,7 +19,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logermiddware);
+// app.use(logermiddware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -37,12 +37,11 @@ app.use(session({
 
 
 app.use("/img",express.static(path.join(__dirname, 'img')));
-//app.use('/', apiRouter);
-// app.use('/', indexRouter);
-//app.use('/users', usersRouter);
-//app.use("/file",fileRouter)
+app.use('/', apiRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use("/file",fileRouter)
 // catch 404 and forward to error handler
-
 
 // error handler
 app.use(function(err, req, res, next) {
